@@ -1,4 +1,4 @@
-<img src="images/pf1.png" width="800" height="300">
+<img src="images/pf1.png" width="400" height="300">
 
 WIP:
 - [ ] Optimize to backpressure, buffers, checkpoint intervals and wm intervals for larger state 

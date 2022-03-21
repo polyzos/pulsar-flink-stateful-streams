@@ -8,19 +8,19 @@ WIP:
 - [ ] User RocksDB API to demonstrate what gets written and how
 - [ ] Use time based joins for session windows and add time constraints
 
-### Use Case 1
+### Use Case 1 - Data Enrichment with Topic Lookups
 
 <p align="center">
     <img src="images/pf2.png" width="800" height="300">
 </p>
 
-### Use Case 2
+### Use Case 2 - Data Aggregation with Time Constraints on Time Windows
 <p align="center">
     <img src="images/pf3.png" width="800" height="300">
 </p>
 
-Setup a Pulsar Cluster
-======================
+### Setup a Pulsar Cluster
+
 ```shell
 docker run -rm -it --name pulsar \
 -p 6650:6650  -p 8080:8080 \
@@ -30,8 +30,7 @@ apachepulsar/pulsar:2.9.1 \
 bin/pulsar standalone
 ```
 
-Setup Pulsar Logical Components
-===============================
+### Setup Pulsar Logical Components
 Go into your container
 ```shell
 docker exec -it pulsar bash
@@ -60,8 +59,7 @@ bin/pulsar-admin topics get-retention persistent://public/default/users
 bin/pulsar-admin topics get-retention persistent://public/default/items
 ```
 
-Start a Flink Cluster
-=====================
+### Start a Flink Cluster
 ```shell
 start-cluster
 ```
@@ -71,8 +69,7 @@ Deploy the Flink Job
 ./deploy.sh
 ```
 
-Monitor Flink logs
-==================
+### Monitor Flink logs
 Tail the logs
 ```shell
 tail -f log/flink-*-taskexecutor-*

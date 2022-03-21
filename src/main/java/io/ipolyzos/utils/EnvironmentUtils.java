@@ -25,9 +25,9 @@ public class EnvironmentUtils {
         flinkConfig.set(MANAGED_MEMORY_SIZE, MemorySize.ofMebiBytes(1024));
 
         if (withWebUI) {
-            return StreamExecutionEnvironment.getExecutionEnvironment();
-        } else {
             return StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(flinkConfig);
+        } else {
+            return StreamExecutionEnvironment.getExecutionEnvironment();
         }
     }
 

@@ -15,8 +15,6 @@ public class ItemLookupHandler extends CoProcessFunction<OrderWithUserData, Item
     private static final Logger logger = LoggerFactory.getLogger(UserLookupHandler.class);
     private ValueState<Item> itemState;
 
-    private int totalPresentState = 0;
-    private int totalMissingState = 0;
     @Override
     public void open(Configuration parameters) throws Exception {
         logger.info("{}, initializing state ...", this.getClass().getSimpleName());
@@ -52,15 +50,6 @@ public class ItemLookupHandler extends CoProcessFunction<OrderWithUserData, Item
     public void processElement2(Item item,
                                 CoProcessFunction<OrderWithUserData, Item, EnrichedOrder>.Context context,
                                 Collector<EnrichedOrder> collector) throws Exception {
-        Item value = itemState.value();
-        if (value == null) {
-            logger.warn("No state for item with key '{}'.", item.getId());
-            totalMissingState += 1;
-        } else {
-            logger.info("Item State already present for key '{}'.", item.getId());
-            totalPresentState += 1;
-        }
-        logger.info("Items Total - present state '{}', missing state '{}'", totalPresentState, totalMissingState);
         itemState.update(item);
     }
 }

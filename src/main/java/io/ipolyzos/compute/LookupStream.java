@@ -27,7 +27,7 @@ public class LookupStream {
 
     public static void main(String[] args) throws Exception {
         // 1. Initialize the execution environment
-        StreamExecutionEnvironment env = EnvironmentUtils.initEnvWithWebUI(true);
+        StreamExecutionEnvironment env = EnvironmentUtils.initEnvWithWebUI(false);
 
         env.setParallelism(1);
 

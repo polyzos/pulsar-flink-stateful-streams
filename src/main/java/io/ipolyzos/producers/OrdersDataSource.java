@@ -15,9 +15,9 @@ import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OrdersProducer {
+public class OrdersDataSource {
     private static final Logger logger
-            = LoggerFactory.getLogger(OrdersProducer.class);
+            = LoggerFactory.getLogger(OrdersDataSource.class);
     public static void main(String[] args) throws IOException, InterruptedException {
         Stream<Order> sourceStream = DataSourceUtils.loadDataFile(AppConfig.ORDERS_FILE_PATH)
                 .map(DataSourceUtils::lineAsOrder);

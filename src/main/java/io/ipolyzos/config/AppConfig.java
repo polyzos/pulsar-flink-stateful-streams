@@ -10,13 +10,7 @@ public class AppConfig {
     public static final String USERS_TOPIC  = "users";
     public static final String ITEMS_TOPIC  = "items";
 
-    // EVENT TOPICS
-    public static final String VIEW_EVENTS_TOPIC     = "view_events";
-    public static final String PURCHASE_EVENTS_TOPIC = "purchase_events";
-    public static final String CART_EVENTS_TOPIC     = "cart_events";
-
     // Input File Sources
-    public static final String EVENTS_FILE_PATH = "/data/events.csv";
     public static final String ORDERS_FILE_PATH = "/data/orders.csv";
     public static final String USERS_FILE_PATH  = "/data/users.csv";
     public static final String ITEMS_FILE_PATH  = "/data/items.csv";

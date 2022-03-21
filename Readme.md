@@ -62,6 +62,11 @@ bin/pulsar-admin topics set-retention -s -1 -t -1 persistent://public/default/it
 
 bin/pulsar-admin topics get-retention persistent://public/default/users
 bin/pulsar-admin topics get-retention persistent://public/default/items
+
+bin/pulsar-admin topics set-retention -s -1 -t -1 persistent://public/default/view_events
+bin/pulsar-admin topics set-retention -s -1 -t -1 persistent://public/default/purchase_events
+bin/pulsar-admin topics set-retention -s -1 -t -1 persistent://public/default/cart_events
+
 ```
 
 ### Start a Flink Cluster

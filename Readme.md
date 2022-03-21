@@ -1,4 +1,7 @@
-<img src="images/pf1.png" width="400" height="300">
+<p align="center">
+    <img src="images/pf1.png" width="400" height="300">
+</p>
+
 
 WIP:
 - [ ] Optimize to backpressure, buffers, checkpoint intervals and wm intervals for larger state 
@@ -7,12 +10,15 @@ WIP:
 
 Scenario 1
 ==========
-<img src="images/pf2.png" width="800" height="300">
+<p align="center">
+    <img src="images/pf2.png" width="800" height="300">
+</p>
 
 Scenario 2
 ==========
-<img src="images/pf3.png" width="800" height="300">
-
+<p align="center">
+    <img src="images/pf3.png" width="800" height="300">
+</p>
 
 Setup a Pulsar Cluster
 ======================

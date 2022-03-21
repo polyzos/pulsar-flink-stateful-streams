@@ -8,13 +8,20 @@ WIP:
 - [ ] User RocksDB API to demonstrate what gets written and how
 - [ ] Use time based joins for session windows and add time constraints
 
-### Use Case 1 - Data Enrichment with Topic Lookups
+### Use Case 1
+<p align="center">
+ <h4>Data Enrichment with Topic Lookups</h4>
+</p>
 
 <p align="center">
     <img src="images/pf2.png" width="800" height="300">
 </p>
 
-### Use Case 2 - Data Aggregation with Time Constraints on Time Windows
+### Use Case 2
+<p align="center">
+ <h4>Data Aggregation with Time Constraints on Time Windows</h4>
+</p>
+
 <p align="center">
     <img src="images/pf3.png" width="800" height="300">
 </p>

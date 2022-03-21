@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/pf1.png" width="600" height="400">
+    <img src="images/pf1.png" width="500" height="300">
 </p>
 
 
@@ -8,14 +8,13 @@ WIP:
 - [ ] User RocksDB API to demonstrate what gets written and how
 - [ ] Use time based joins for session windows and add time constraints
 
-Scenario 1
-==========
+### Use Case 1
+
 <p align="center">
     <img src="images/pf2.png" width="800" height="300">
 </p>
 
-Scenario 2
-==========
+### Use Case 2
 <p align="center">
     <img src="images/pf3.png" width="800" height="300">
 </p>

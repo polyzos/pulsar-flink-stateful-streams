@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="images/pf1.png" width="400" height="300">
+    <img src="images/pf1.png" width="600" height="400">
 </p>
 
 

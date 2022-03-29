@@ -1,6 +1,5 @@
 package io.ipolyzos.utils;
 
-import io.ipolyzos.config.AppConfig;
 import io.ipolyzos.models.Item;
 import io.ipolyzos.models.Order;
 import io.ipolyzos.models.User;
@@ -8,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataSourceUtils {

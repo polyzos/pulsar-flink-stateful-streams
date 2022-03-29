@@ -19,11 +19,13 @@ import org.apache.flink.connector.pulsar.source.PulsarSource;
 import org.apache.flink.connector.pulsar.source.enumerator.cursor.StartCursor;
 import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.util.OutputTag;
 import org.apache.pulsar.client.api.SubscriptionType;
 
-public class LookupStream {
+public class EnrichmentStream {
 
     public static void main(String[] args) throws Exception {
         // 1. Initialize the execution environment
@@ -68,7 +70,7 @@ public class LookupStream {
                         AppConfig.ORDERS_TOPIC,
                         "flink-orders-consumer",
                         SubscriptionType.Exclusive,
-                        StartCursor.latest(),
+                        StartCursor.earliest(),
                         Order.class);
 
         WatermarkStrategy<Order> watermarkStrategy =
@@ -77,38 +79,49 @@ public class LookupStream {
                                 (SerializableTimestampAssigner<Order>) (order, l) -> order.getCreatedAt()
                         );
 
+        final OutputTag<EnrichedOrder> missingStateTagUsers = new OutputTag<>("missingState#User"){};
+        final OutputTag<EnrichedOrder> missingStateTagItems = new OutputTag<>("missingState#Item"){};
+
         // 3. Initialize Streams
         DataStream<User> userStream =
                 env.fromSource(userSource, WatermarkStrategy.noWatermarks(), "Pulsar User Source")
-//                        .setParallelism(1)
                         .name("pulsarUserSource")
                         .uid("pulsarUserSource");
 
         DataStream<Item> itemStream =
                 env.fromSource(itemSource, WatermarkStrategy.noWatermarks(), "Pulsar Items Source")
-//                        .setParallelism(1)
                         .name("pulsarItemSource")
                         .uid("pulsarItemSource");
 
         DataStream<Order> orderStream = env.fromSource(orderSource, watermarkStrategy, "Pulsar Orders Source")
-//                .setParallelism(1)
                 .name("pulsarOrderSource")
                 .uid("pulsarOrderSource");
 
-        DataStream<EnrichedOrder> enrichedStream = orderStream
+        DataStream<OrderWithUserData> orderWithUserDataStream = orderStream
                 .keyBy(Order::getUserId)
                 .connect(userStream.keyBy(User::getId))
-                .process(new UserLookupHandler())
+                .process(new UserLookupHandler(missingStateTagUsers))
                 .uid("usersLookup")
-                .name("usersLookup")
+                .name("usersLookup");
+
+        SingleOutputStreamOperator<EnrichedOrder> enrichedOrderStream = orderWithUserDataStream
                 .keyBy(OrderWithUserData::getItemId)
                 .connect(itemStream.keyBy(Item::getId))
-                .process(new ItemLookupHandler())
+                .process(new ItemLookupHandler(missingStateTagItems))
                 .uid("itemsLookup")
                 .name("itemsLookup");
 
+        enrichedOrderStream.getSideOutput(missingStateTagUsers)
+                .printToErr()
+                .name("MissingUserStateSink")
+                .uid("MissingUserStateSink");
 
-        enrichedStream
+        enrichedOrderStream.getSideOutput(missingStateTagItems)
+                .printToErr()
+                .name("MissingItemStateSink")
+                .uid("MissingItemStateSink");
+
+        enrichedOrderStream
                 .print()
                 .uid("print")
                 .name("print");

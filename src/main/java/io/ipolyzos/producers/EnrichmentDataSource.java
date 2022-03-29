@@ -4,11 +4,13 @@ import io.ipolyzos.config.AppConfig;
 import io.ipolyzos.models.Item;
 import io.ipolyzos.models.User;
 import io.ipolyzos.utils.ClientUtils;
-import io.ipolyzos.utils.DataSourceUtils;
 import java.io.IOException;
 import java.util.Iterator;
+import io.ipolyzos.utils.DataSourceUtils;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
+import org.apache.pulsar.client.api.MessageId;
 import org.apache.pulsar.client.api.Producer;
 import org.apache.pulsar.client.api.PulsarClient;
 import org.apache.pulsar.client.api.PulsarClientException;
@@ -16,9 +18,9 @@ import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LookupDataSource {
+public class EnrichmentDataSource {
     private static final Logger logger
-            = LoggerFactory.getLogger(LookupDataSource.class);
+            = LoggerFactory.getLogger(EnrichmentDataSource.class);
 
     public static void main(String[] args) throws IOException {
         Stream<User> userStream = DataSourceUtils.loadDataFile(AppConfig.USERS_FILE_PATH)
@@ -82,12 +84,16 @@ public class LookupDataSource {
                     .value(value)
                     .eventTime(System.currentTimeMillis())
                     .sendAsync()
-                    .whenComplete((id, exception) -> {
-                        if (exception != null) {
-                            logger.error("❌ Failed message: {}", exception.getMessage());
-                        } else {
-                            logger.info("✅ Acked message {} - Total {}", id, counter.getAndIncrement());
-                        }
-                    });
+                    .whenComplete(callback(counter));
         }
+
+    private static BiConsumer<MessageId, Throwable> callback(AtomicInteger counter) {
+        return (id, exception) -> {
+            if (exception != null) {
+                logger.error("❌ Failed message: {}", exception.getMessage());
+            } else {
+                logger.info("✅ Acked message {} - Total {}", id, counter.getAndIncrement());
+            }
+        };
+    }
 }

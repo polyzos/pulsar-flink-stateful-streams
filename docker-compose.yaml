@@ -1,17 +1,17 @@
-version: "2.2"
+version: '3.7'
 services:
   jobmanager:
-    image: flink:1.14.3-scala_2.12
+    image: flink:1.14.4-scala_2.12-java11
     ports:
       - "8081:8081"
     command: jobmanager
     environment:
       - |
         FLINK_PROPERTIES=
-        jobmanager.rpc.address: jobmanager        
+        jobmanager.rpc.address: jobmanager
 
   taskmanager:
-    image: flink:1.14.3-scala_2.12
+    image: flink:1.14.4-scala_2.12-java11
     depends_on:
       - jobmanager
     command: taskmanager
@@ -20,4 +20,27 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 4
+        taskmanager.numberOfTaskSlots: 2
+
+  pulsar:
+    image: apachepulsar/pulsar:2.9.1
+    container_name: pulsar
+    ports:
+      - "8080:8080"
+      - "6650:6650"
+    environment:
+      PULSAR_MEM: " -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+#      - PULSAR_MEM=" -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g -Dpulsar.auth.basic.conf=/pulsar/conf/.htpasswd"
+      systemTopicEnabled: "true"
+      topicLevelPoliciesEnabled: "true"
+      transactionCoordinatorEnabled: "true"
+#      - authenticationEnabled=true
+#      - authorizationEnabled=true
+#      - authenticationProviders=org.apache.pulsar.broker.authentication.AuthenticationProviderBasic
+#      - superUserRoles=super
+#      - brokerClientAuthenticationPlugin=org.apache.pulsar.client.impl.auth.AuthenticationBasic
+#      - brokerClientAuthenticationParameters={\"userId\":\"super\",\"password\":\"superpass\"}
+    command: >
+      /bin/bash -c
+      " bin/apply-config-from-env.py conf/standalone.conf
+      && bin/pulsar standalone"

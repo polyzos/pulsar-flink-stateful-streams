@@ -3,8 +3,8 @@ package io.ipolyzos.config;
 import java.util.Optional;
 
 public class AppConfig {
-    public static final String SERVICE_HTTP_URL = "http://localhost:8080";
-    public static final String SERVICE_URL      = "pulsar://localhost:6650";
+    public static final String SERVICE_HTTP_URL = "http://pulsar:8080";
+    public static final String SERVICE_URL      = "pulsar://pulsar:6650";
 
     public static final String ORDERS_TOPIC = "orders";
     public static final String USERS_TOPIC  = "users";

@@ -18,9 +18,9 @@ import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EnrichmentDataSource {
+public class LookupDataProducer {
     private static final Logger logger
-            = LoggerFactory.getLogger(EnrichmentDataSource.class);
+            = LoggerFactory.getLogger(LookupDataProducer.class);
 
     public static void main(String[] args) throws IOException {
         Stream<User> userStream = DataSourceUtils.loadDataFile(AppConfig.USERS_FILE_PATH)

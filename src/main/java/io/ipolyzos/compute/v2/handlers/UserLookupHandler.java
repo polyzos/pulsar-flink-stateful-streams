@@ -1,6 +1,5 @@
-package io.ipolyzos.compute.handlers;
+package io.ipolyzos.compute.v2.handlers;
 
-import io.ipolyzos.models.EnrichedOrder;
 import io.ipolyzos.models.Order;
 import io.ipolyzos.models.OrderWithUserData;
 import io.ipolyzos.models.User;
@@ -9,18 +8,17 @@ import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.co.CoProcessFunction;
 import org.apache.flink.util.Collector;
-import org.apache.flink.util.OutputTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserLookupHandler extends CoProcessFunction<Order, User, OrderWithUserData> {
     private static final Logger logger = LoggerFactory.getLogger(UserLookupHandler.class);
-    private final OutputTag<EnrichedOrder> missingStateTag;
+//    private final OutputTag<EnrichedOrder> missingStateTag;
     private ValueState<User> userState;
 
-    public UserLookupHandler(OutputTag<EnrichedOrder> missingStateTag) {
-        this.missingStateTag = missingStateTag;
-    }
+//    public UserLookupHandler(OutputTag<EnrichedOrder> missingStateTag) {
+//        this.missingStateTag = missingStateTag;
+//    }
 
     @Override
     public void open(Configuration parameters) throws Exception {
@@ -38,10 +36,10 @@ public class UserLookupHandler extends CoProcessFunction<Order, User, OrderWithU
         User user = userState.value();
         if (user == null) {
             logger.warn("Failed to find state for id '{}'", order.getUserId());
-            EnrichedOrder enrichedOrder =
-                    new EnrichedOrder(order.getInvoiceId(), order.getLineItemId(), null, null, order.getCreatedAt(),
-                            order.getPaidAt());
-            context.output(missingStateTag, enrichedOrder);
+//            EnrichedOrder enrichedOrder =
+//                    new EnrichedOrder(order.getInvoiceId(), order.getLineItemId(), null, null, order.getCreatedAt(),
+//                            order.getPaidAt());
+//            context.output(missingStateTag, enrichedOrder);
         } else {
             collector.collect(order.withUserData(user));
         }

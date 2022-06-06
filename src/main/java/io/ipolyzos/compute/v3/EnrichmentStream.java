@@ -50,7 +50,7 @@ public class EnrichmentStream {
                         AppConfig.ORDERS_TOPIC,
                         "flink-orders-consumer",
                         SubscriptionType.Exclusive,
-                        StartCursor.earliest(),
+                        StartCursor.latest(),
                         Order.class);
 
         WatermarkStrategy<Order> watermarkStrategy =
